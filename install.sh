@@ -119,6 +119,7 @@ install_nvim() {
   sudo apt-get -y install silversearcher-ag xclip
   sudo wget -O /usr/local/bin/nvim https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
   sudo chmod +x /usr/local/bin/nvim
+  mkdir -p ~/.config/nvim/_temp ~/.config/nvim/_backup
   wget -O ~/.config/nvim/init.vim https://raw.githubusercontent.com/adrimll97/dotfiles/master/nvim/init.vim
   wget -O ~/.config/nvim/coc-settings.json https://raw.githubusercontent.com/adrimll97/dotfiles/master/nvim/coc-settings.json
   nvim +PlugInstall +qa
