@@ -21,6 +21,7 @@ install_cmake() {
   wget https://github.com/Kitware/CMake/releases/download/v3.21.0-rc3/cmake-3.21.0-rc3.tar.gz
   tar -zxvf cmake-3.21.0-rc3.tar.gz
   sudo apt-get install build-essential
+  sudo apt install libssl-dev
   cd cmake-3.21.0-rc3 && sudo ./bootstrap && sudo make && sudo make install && rm cmake-3.21.0-rc3.tar.gz && cd
 }
 
