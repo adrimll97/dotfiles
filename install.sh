@@ -36,7 +36,7 @@ need_install() {
 }
 
 check_and_install_requirements() {
-  echo "This script needs whiptail, git, asdf and cmake to work. So, these will be installed."
+  echo "This script needs whiptail, git, asdf, curl and cmake to work. So, these will be installed."
   echo "Checking requirements..."
   sudo apt-get update
 
@@ -48,6 +48,9 @@ check_and_install_requirements() {
   fi
   if need_install asdf; then
     install_asdf
+  fi
+  if need_install curl; then
+    sudo apt-get -y install curl
   fi
   if need_install cmake; then
     install_cmake
