@@ -92,9 +92,7 @@ install_tmux() {
   skip tmux && return
 
   sudo apt-get update && sudo apt-get -y install xclip
-  asdf plugin-add tmux
-  asdf install tmux 3.2a
-  asdf global tmux 3.2a
+  sudo apt-get install tmux
   wget -O ~/.tmux.conf https://raw.githubusercontent.com/adrimll97/dotfiles/master/tmux/.tmux.conf
 
   install_tmux-mem-cpu-load
