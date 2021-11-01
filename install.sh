@@ -76,6 +76,7 @@ install_zsh() {
   git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
   git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
   wget -O ~/.zshrc https://raw.githubusercontent.com/adrimll97/dotfiles/master/zsh/.zshrc
   wget -O ~/.p10k.zsh https://raw.githubusercontent.com/adrimll97/dotfiles/master/zsh/.p10k.zsh
 
