@@ -21,12 +21,13 @@ Plug 'sheerun/vim-polyglot'
 Plug 'airblade/vim-rooter'
 Plug 'neoclide/coc.nvim',               {'branch': 'release'}
 Plug 'edkolev/tmuxline.vim'
-Plug 'Yggdroot/indentLine'
 Plug 'jiangmiao/auto-pairs'
 Plug 'APZelos/blamer.nvim'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'inkarkat/vim-CursorLineCurrentWindow'
+Plug 'voldikss/vim-floaterm'
+Plug 'ryanoasis/vim-devicons'
 
 
 call plug#end()
@@ -47,6 +48,9 @@ set directory^=~/.config/nvim/_temp//      " Swap files
 set background=dark                        " Default color maps for dark background
 set laststatus=2                           " Always display the status bar
 set cursorline
+set foldmethod=indent
+set nofoldenable
+set foldlevel=2
 
 " Indentation options
 set autoindent                             " New lines inherit the indentation of previous lines
@@ -148,17 +152,23 @@ inoremap <silent> <C-k> <C-R>=OmniPopup('k')<CR>
 " Nerdtree
   " Open nerdtree with Ñ
   nmap t :NERDTree <CR>
+  let NERDTreeShowHidden=1
 
   " Open file in nerdtree
   nmap <Leader>f :NERDTreeFind <CR>
 
 " Nerdcommenter
   " Comment out the current line or text selected in visual mode with ñ
-  map ; :call NERDComment(0,"toggle") <CR>
+  map ; :call nerdcommenter#Comment(0, "toggle") <CR>
+  let g:NERDSpaceDelims = 1
+  let g:NERDTrimTrailingWhitespace = 1
 
 " splitjoin.vim
   nmap <Leader>gs gS<CR>
   nmap <Leader>gj gJ<CR>
+
+  " floaterm
+  nmap <c-t> :FloatermNew --autoclose=2 tmux<CR>
 
 " Fzf
   " Open file finder
@@ -171,13 +181,13 @@ inoremap <silent> <C-k> <C-R>=OmniPopup('k')<CR>
   nmap <Leader>g :GFiles?<CR>
   " Blamer
   let g:blamer_enabled = 1
-  nmap <Leader>b :Gblame<CR>
+  nmap <Leader>b :Git blame<CR>
   " Buffers
   let g:fzf_buffers_jump = 1
   nmap <c-space> :Buffers<CR>
 
   " https://github.com/junegunn/fzf#respecting-gitignore
-  let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+  " let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
   " Fzf configurations
   let g:fzf_action = {
@@ -298,13 +308,12 @@ inoremap <silent> <C-k> <C-R>=OmniPopup('k')<CR>
   " Format on save
   "au BufWritePre * call CocAction('format')
 
-" ruby host
-let g:ruby_host_prog = '/home/adrian/.rvm/gems/ruby-2.6.6/bin/neovim-ruby-host'
+  " ruby host
+  " let g:ruby_host_prog = '/home/adrian/.rvm/gems/ruby-2.6.6/bin/neovim-ruby-host'
 
-" solargraph
-let g:coc_global_extensions = ['coc-solargraph']
-let g:coc_disable_startup_warning = 1
-
+  " solargraph
+  let g:coc_global_extensions = ['coc-solargraph']
+  let g:coc_disable_startup_warning = 1
 
 " -----References-----
 " https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
