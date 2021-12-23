@@ -9,7 +9,7 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'joshdick/onedark.vim'
+Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-unimpaired'
@@ -22,7 +22,7 @@ Plug 'airblade/vim-rooter'
 Plug 'neoclide/coc.nvim',               {'branch': 'release'}
 Plug 'edkolev/tmuxline.vim'
 Plug 'jiangmiao/auto-pairs'
-Plug 'APZelos/blamer.nvim'
+Plug 'ThanhKhoaIT/git-message.vim'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'inkarkat/vim-CursorLineCurrentWindow'
@@ -87,8 +87,9 @@ set wildignore+=*/node_modules/*                                                
 " Activa true colors en la terminal
 set termguicolors
 
-" Activa tema onedark
-colorscheme onedark
+" Activa tema de nvim
+colorscheme gruvbox
+let g:gruvbox_contrast_dark='hard'
 
 " permite copiar al clipboard
 set clipboard+=unnamedplus

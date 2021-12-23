@@ -128,7 +128,6 @@ install_nvim() {
   wget -O ~/.config/nvim/coc-settings.json https://raw.githubusercontent.com/adrimll97/dotfiles/master/nvim/coc-settings.json
   sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-        
   nvim +PlugInstall +qa
   nvim -c "CocInstall -sync coc-solargraph|q"
 }
