@@ -23,7 +23,8 @@ Plug 'neoclide/coc.nvim',               {'branch': 'release'}
 Plug 'edkolev/tmuxline.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'ThanhKhoaIT/git-message.vim'
-Plug 'lukas-reineke/indent-blankline.nvim'
+" Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'Yggdroot/indentLine'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'inkarkat/vim-CursorLineCurrentWindow'
 Plug 'voldikss/vim-floaterm'
@@ -88,8 +89,8 @@ set wildignore+=*/node_modules/*                                                
 set termguicolors
 
 " Activa tema de nvim
+let g:gruvbox_sign_column='bg0'
 colorscheme gruvbox
-let g:gruvbox_contrast_dark='hard'
 
 " permite copiar al clipboard
 set clipboard+=unnamedplus
@@ -303,7 +304,8 @@ inoremap <silent> <C-k> <C-R>=OmniPopup('k')<CR>
       \'y'    : ['MEMORY: #(tmux-mem-cpu-load -a 0 -g 0 -m 2 --only-memory)', 'CPU: #(tmux-mem-cpu-load -a 0 -g 0 -m 2 --only-cpu)']}
 
 " Indent-lines
-  let g:indentLine_char = '⎸'
+  " let g:indentLine_char = '⎸'
+  let g:indentLine_char_list = ['|', '¦', '┆', '┊']
   let g:indentLine_color_term = 66
 
   " Format on save
