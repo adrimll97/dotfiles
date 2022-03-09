@@ -164,6 +164,8 @@ inoremap <silent> <C-k> <C-R>=OmniPopup('k')<CR>
   map ; :call nerdcommenter#Comment(0, "toggle") <CR>
   let g:NERDSpaceDelims = 1
   let g:NERDTrimTrailingWhitespace = 1
+  let g:NERDDefaultAlign = 'left'
+  let g:NERDCompactSexyComs = 1
 
 " splitjoin.vim
   nmap <Leader>gs gS<CR>

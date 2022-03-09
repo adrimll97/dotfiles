@@ -72,7 +72,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git colored-man-pages zsh-autosuggestions)
+plugins=(git colored-man-pages zsh-autosuggestions rails rake)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -103,13 +103,12 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 alias origclean='find . -name "*.orig" -exec rm -f {} \;'
-alias fetcheck="git fetch origin ${1} && git checkout ${1}"
 alias test_prepare='RAILS_ENV=test rake db:test:prepare'
 alias migrate='bin/rake db:migrate RAILS_ENV=development'
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-prompt_context() {}
+alias console='bundle exec rails console'
+fetcheck(){
+  git fetch origin $1 && git checkout $1
+}
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -124,3 +123,28 @@ export EDITOR="$VISUAL"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# --- RVM ---
+#
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export GEM_HOME="$HOME/.gem"
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+export PATH="$PATH:/usr/local/rvm/bin" # Add RVM to PATH for scripting
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+# Error tmux with rvm https://github.com/rvm/rvm/issues/3270
+# https://github.com/charlietag/os_preparation/blob/master/templates/F_02_PKG_06_ruby_00_user_rubyuser/user_home/.bash_user/.rvm_setup.sh
+if [[ -s "/usr/local/rvm/scripts/rvm" ]]; then
+  export rvm_previous_environment="default"
+  source /usr/local/rvm/scripts/rvm
+  export rvm_previous_environment="default"
+  cd '.'
+  if [[ -n "${TMUX}" ]]; then
+    tmux setenv GEM_HOME $GEM_HOME
+    tmux setenv -g GEM_HOME $GEM_HOME
+    tmux setenv GEM_PATH $GEM_PATH
+    tmux setenv -g GEM_PATH $GEM_PATH
+  fi
+fi
+# --- RVM ---
