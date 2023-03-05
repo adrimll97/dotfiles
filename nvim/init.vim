@@ -232,14 +232,15 @@ inoremap <silent> <C-k> <C-R>=OmniPopup('k')<CR>
   vmap <C-j> ]egv
 
 " Coc.nvim
-  " Map for document filetypes so the server could handle current document as another filetype
-  let g:coc_filetype_map = {
-        \ 'svelte': 'javascript',
-        \ }
-
   " Remap keys for gotos
   nmap <silent> gd <Plug>(coc-definition)
   nmap <silent> gr <Plug>(coc-references)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+
+  " Make <CR> to accept selected completion item or notify coc.nvim to format
+  " <C-g>u breaks current undo, please make your own choice.
+  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
   " Use K to show documentation in preview window
   nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -251,6 +252,10 @@ inoremap <silent> <C-k> <C-R>=OmniPopup('k')<CR>
       call CocAction('doHover')
     endif
   endfunction
+
+  " solargraph
+  let g:coc_global_extensions = ['coc-solargraph']
+  let g:coc_disable_startup_warning = 1
 
 " Polyglot
   " Svelte files as html
@@ -298,12 +303,11 @@ inoremap <silent> <C-k> <C-R>=OmniPopup('k')<CR>
   let g:airline#extensions#tabline#show_close_button = 0
 
 " Tmuxline
-  "let g:tmuxline_preset = 'powerline'
   let g:tmuxline_preset = {
-      \'b'    : '%c',
+      \'c'    : '%D',
       \'win'  : ['#I', '#W'],
       \'cwin' : ['#I', '#W'],
-      \'y'    : ['MEMORY: #(tmux-mem-cpu-load -a 0 -g 0 -m 2 --only-memory)', 'CPU: #(tmux-mem-cpu-load -a 0 -g 0 -m 2 --only-cpu)']}
+      \'x'    : '%r'}
 
 " Indent-lines
   " let g:indentLine_char = '⎸'
@@ -315,10 +319,6 @@ inoremap <silent> <C-k> <C-R>=OmniPopup('k')<CR>
 
   " ruby host
   " let g:ruby_host_prog = '/home/adrian/.rvm/gems/ruby-2.6.6/bin/neovim-ruby-host'
-
-  " solargraph
-  let g:coc_global_extensions = ['coc-solargraph']
-  let g:coc_disable_startup_warning = 1
 
 " -----References-----
 " https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
