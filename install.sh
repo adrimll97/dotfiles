@@ -16,15 +16,6 @@ install_asdf() {
   source "$HOME/.asdf/completions/asdf.bash"
 }
 
-install_cmake() {
-  mkdir -p ~/CMake && cd ~/CMake
-  wget https://github.com/Kitware/CMake/releases/download/v3.21.0-rc3/cmake-3.21.0-rc3.tar.gz
-  tar -zxvf cmake-3.21.0-rc3.tar.gz
-  sudo apt-get install build-essential
-  sudo apt install libssl-dev
-  cd cmake-3.21.0-rc3 && sudo ./bootstrap && sudo make && sudo make install && rm cmake-3.21.0-rc3.tar.gz && cd
-}
-
 need_install() {
   if which "$1" > /dev/null; then
     echo "Already installed $1"
@@ -36,7 +27,7 @@ need_install() {
 }
 
 check_and_install_requirements() {
-  echo "This script needs whiptail, git, asdf, curl and cmake to work. So, these will be installed."
+  echo "This script needs whiptail, git, asdf and curl to work. So, these will be installed."
   echo "Checking requirements..."
   sudo apt-get update
 
@@ -51,9 +42,6 @@ check_and_install_requirements() {
   fi
   if need_install curl; then
     sudo apt-get -y install curl
-  fi
-  if need_install cmake; then
-    install_cmake
   fi
 }
 
@@ -72,6 +60,11 @@ skip() {
   fi
 }
 
+install_nerd_font() {
+  mkdir -p ~/.local/share/fonts
+  cd ~/.local/share/fonts && curl -fLo "Meslo LG S Regular Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S/Regular/complete/Meslo%20LG%20S%20Regular%20Nerd%20Font%20Complete.ttf && cd
+}
+
 install_zsh() {
   skip zsh && return
 
@@ -84,13 +77,9 @@ install_zsh() {
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
   wget -O ~/.zshrc https://raw.githubusercontent.com/adrimll97/dotfiles/master/zsh/.zshrc
   wget -O ~/.p10k.zsh https://raw.githubusercontent.com/adrimll97/dotfiles/master/zsh/.p10k.zsh
+  install_nerd_font
 
   chsh -s "$(which zsh)"
-}
-
-install_tmux-mem-cpu-load() {
-  git clone https://github.com/adrimll97/tmux-mem-cpu-load.git
-  cd tmux-mem-cpu-load && cmake . && make && sudo make install && cd
 }
 
 install_tmux() {
@@ -99,8 +88,6 @@ install_tmux() {
   sudo apt-get update && sudo apt-get -y install xclip
   sudo apt-get install tmux
   wget -O ~/.tmux.conf https://raw.githubusercontent.com/adrimll97/dotfiles/master/tmux/.tmux.conf
-
-  install_tmux-mem-cpu-load
 }
 
 install_nodejs() {
