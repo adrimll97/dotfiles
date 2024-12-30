@@ -29,7 +29,10 @@ Plug 'AndrewRadev/splitjoin.vim'
 Plug 'inkarkat/vim-CursorLineCurrentWindow'
 Plug 'voldikss/vim-floaterm'
 Plug 'ryanoasis/vim-devicons'
-
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
+Plug 'github/copilot.vim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'CopilotC-Nvim/CopilotChat.nvim'
 
 call plug#end()
 
@@ -73,7 +76,7 @@ set listchars=""                           " Reset the listchars
 set listchars=tab:\ \                      " A tab should display as "  ", trailing whitespace as "."
 set listchars+=trail:.                     " Show trailing spaces as dots
 set listchars+=extends:>                   " The character to show in the last column when wrap is
-                                           " off and the line continues beyond the right of the screen
+" off and the line continues beyond the right of the screen
 set listchars+=precedes:<                  " The character to show in the last column when wrap is
 
 " Ignore files
@@ -111,162 +114,173 @@ imap jk <Esc>
 " Save with ,s
 noremap <Leader>s :w<CR>
 
-" Save all with ,a
-noremap <Leader>a :wa<CR>
+" Save all with ,sa
+noremap <Leader>sa :wa<CR>
 
-" Save and exit with ,w
-noremap <Leader>w :wq<CR>
+" Save and exit with ,sq
+noremap <Leader>sq :wq<CR>
 
 " Close window with ,q
 noremap <Leader>q :q<CR>
 
 " Exit with ,e
-noremap <Leader>e :qa<CR>
+noremap <Leader>e :qa!<CR>
 
 " Open new tab with ,t
 noremap <Leader>t :tabe<CR>
 
+" Open pane in new tab with ,T
+noremap <Leader>T :tab split<CR>
+
 " Close tab with ,c
 noremap <Leader>c :tabc<CR>
 
-" Move on popups with j and k
+" Open alternate file with ,a
+noremap <Leader>a :A<CR>
 
+" Open related file with ,r
+noremap <Leader>r :R<CR>
+
+" Move on popups with j and k
 function! OmniPopup(action)
-    if pumvisible()
-        if a:action == 'j'
-            return "\<C-N>"
-        elseif a:action == 'k'
-            return "\<C-P>"
-        endif
+  if pumvisible()
+    if a:action == 'j'
+      return "\<C-N>"
+    elseif a:action == 'k'
+      return "\<C-P>"
     endif
-    return a:action
+  endif
+  return a:action
 endfunction
 
 inoremap <silent> <C-j> <C-R>=OmniPopup('j')<CR>
 inoremap <silent> <C-k> <C-R>=OmniPopup('k')<CR>
 
-
+" Zoom one pane
+nnoremap <leader>+ <C-w>_ \| <C-w>\|
+" Restore panes
+nnoremap <leader>= <C-w><C-=>
 
 
 
 " -----Custom settings for plugins-----
 
 " Nerdtree
-  " Open nerdtree with Ñ
-  nmap t :NERDTree <CR>
-  let NERDTreeShowHidden=1
+" Open nerdtree with Ñ
+nmap t :NERDTree <CR>
+let NERDTreeShowHidden=1
 
-  " Open file in nerdtree
-  nmap <Leader>f :NERDTreeFind <CR>
+" Open file in nerdtree
+nmap <Leader>f :NERDTreeFind <CR>
 
 " Nerdcommenter
-  " Comment out the current line or text selected in visual mode with ñ
-  map ; :call nerdcommenter#Comment(0, "toggle") <CR>
-  let g:NERDSpaceDelims = 1
-  let g:NERDTrimTrailingWhitespace = 1
-  let g:NERDDefaultAlign = 'left'
-  let g:NERDCompactSexyComs = 1
+" Comment out the current line or text selected in visual mode with ñ
+map ; :call nerdcommenter#Comment(0, "toggle") <CR>
+let g:NERDSpaceDelims = 1
+let g:NERDTrimTrailingWhitespace = 1
+let g:NERDDefaultAlign = 'left'
+let g:NERDCompactSexyComs = 1
 
 " splitjoin.vim
-  nmap <Leader>gs gS<CR>
-  nmap <Leader>gj gJ<CR>
+nmap <Leader>gs gS<CR>
+nmap <Leader>gj gJ<CR>
 
-  " floaterm
-  nmap <c-t> :FloatermNew --autoclose=2 tmux<CR>
+" floaterm
+nmap <c-t> :FloatermNew --autoclose=2 tmux<CR>
 
 " Fzf
-  " Open file finder
-  nmap <c-p> :Files<CR>
-  " Open file history
-  nmap <c-h> :History<CR>
-  " Open ag
-  nmap <Leader>ag :Ag<CR>
-  " Open git files
-  nmap <Leader>g :GFiles?<CR>
-  " Blamer
-  let g:blamer_enabled = 1
-  nmap <Leader>b :Git blame<CR>
-  " Buffers
-  let g:fzf_buffers_jump = 1
-  nmap <c-space> :Buffers<CR>
+" Open file finder
+nmap <c-p> :Files<CR>
+" Open file history
+nmap <c-h> :History<CR>
+" Open ag
+nmap <Leader>ag :Ag<CR>
+" Open git files
+nmap <Leader>g :GFiles?<CR>
+" Blamer
+let g:blamer_enabled = 1
+nmap <Leader>b :Git blame<CR>
+" Buffers
+let g:fzf_buffers_jump = 1
+nmap <c-space> :Buffers<CR>
 
-  " https://github.com/junegunn/fzf#respecting-gitignore
-  " let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+" https://github.com/junegunn/fzf#respecting-gitignore
+" let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
-  " Fzf configurations
-  let g:fzf_action = {
-              \ 'ctrl-t': 'tab split',
-              \ 'ctrl-s': 'split',
-              \ 'ctrl-v': 'vsplit' }
+" Fzf configurations
+let g:fzf_action = {
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-s': 'split',
+      \ 'ctrl-v': 'vsplit' }
 
-  let g:fzf_colors = {
-              \ 'border':  ['fg', 'Comment'],
-              \ 'hl':      ['fg', 'Comment'],
-              \ 'info':    ['fg', 'PreProc'] }
+let g:fzf_colors = {
+      \ 'border':  ['fg', 'Comment'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'info':    ['fg', 'PreProc'] }
 
 
 " Undotree
-  " Open undo tree
-  nnoremap <F5> :UndotreeToggle<CR>
+" Open undo tree
+nnoremap <F5> :UndotreeToggle<CR>
 
 " Vim-multiple-cursors
-  " https://github.com/terryma/vim-multiple-cursors#gmulti_cursor_insert_maps-default-
-  let g:multi_cursor_insert_maps={'j':1}
+" https://github.com/terryma/vim-multiple-cursors#gmulti_cursor_insert_maps-default-
+let g:multi_cursor_insert_maps={'j':1}
 
-  " Cargar fuente Powerline y símbolos (ver nota)
-  let g:airline_powerline_fonts = 1
+" Cargar fuente Powerline y símbolos (ver nota)
+let g:airline_powerline_fonts = 1
 
-  set noshowmode  " No mostrar el modo actual (ya lo muestra la barra de estado)
+set noshowmode  " No mostrar el modo actual (ya lo muestra la barra de estado)
 
 " Unimpaired
-  " Bubble single lines
-  nmap <C-Up> [e
-  nmap <C-Down> ]e
-  nmap <C-k> [e
-  nmap <C-j> ]e
+" Bubble single lines
+nmap <C-Up> [e
+nmap <C-Down> ]e
+nmap <C-k> [e
+nmap <C-j> ]e
 
-  " Bubble multiple lines
-  vmap <C-Up> [egv
-  vmap <C-Down> ]egv
-  vmap <C-k> [egv
-  vmap <C-j> ]egv
+" Bubble multiple lines
+vmap <C-Up> [egv
+vmap <C-Down> ]egv
+vmap <C-k> [egv
+vmap <C-j> ]egv
 
 " Coc.nvim
-  " Remap keys for gotos
-  nmap <silent> gd <Plug>(coc-definition)
-  nmap <silent> gr <Plug>(coc-references)
-  nmap <silent> gy <Plug>(coc-type-definition)
-  nmap <silent> gi <Plug>(coc-implementation)
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
 
-  " Make <CR> to accept selected completion item or notify coc.nvim to format
-  " <C-g>u breaks current undo, please make your own choice.
-  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-  " Use K to show documentation in preview window
-  nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-  function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-      execute 'h '.expand('<cword>')
-    else
-      call CocAction('doHover')
-    endif
-  endfunction
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 
-  " solargraph
-  let g:coc_global_extensions = ['coc-solargraph']
-  let g:coc_disable_startup_warning = 1
+" solargraph
+let g:coc_global_extensions = ['coc-solargraph']
+let g:coc_disable_startup_warning = 1
 
 " Polyglot
-  " Svelte files as html
-  "autocmd BufNewFile,BufRead *.svelte set filetype=html
+" Svelte files as html
+"autocmd BufNewFile,BufRead *.svelte set filetype=html
 
 " Vim-airlane
-  let g:airline_theme='bubblegum'
-  let g:airline_powerline_fonts = 1
-  let g:airline_section_x = ''
-  let g:airline_section_y = ''
-  let g:airline_mode_map = {
+let g:airline_theme='bubblegum'
+let g:airline_powerline_fonts = 1
+let g:airline_section_x = ''
+let g:airline_section_y = ''
+let g:airline_mode_map = {
       \ '__'     : '-',
       \ 'c'      : 'C',
       \ 'i'      : 'I',
@@ -287,41 +301,40 @@ inoremap <silent> <C-k> <C-R>=OmniPopup('k')<CR>
       \ ''     : 'V',
       \ }
 
-  if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-  endif
-  let g:airline_symbols.linenr = '  '
-  let g:airline_symbols.colnr = '  '
-  let g:airline_symbols.maxlinenr = ''
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.linenr = '  '
+let g:airline_symbols.colnr = '  '
+let g:airline_symbols.maxlinenr = ''
 
-  let g:airline#extensions#tabline#enabled = 1
-  let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-  let g:airline#extensions#tabline#show_buffers = 0
-  let g:airline#extensions#tabline#show_splits = 0
-  let g:airline#extensions#tabline#show_tab_nr = 0
-  let g:airline#extensions#tabline#show_tab_type = 0
-  let g:airline#extensions#tabline#show_close_button = 0
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#show_splits = 0
+let g:airline#extensions#tabline#show_tab_nr = 0
+let g:airline#extensions#tabline#show_tab_type = 0
+let g:airline#extensions#tabline#show_close_button = 0
 
 " Tmuxline
-  let g:tmuxline_preset = {
+let g:tmuxline_preset = {
       \'c'    : '%D',
       \'win'  : ['#I', '#W'],
       \'cwin' : ['#I', '#W'],
-      \'x'    : '%r'}
+      \'x'    : '%T'}
 
 " Indent-lines
-  " let g:indentLine_char = '⎸'
-  let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-  let g:indentLine_color_term = 66
+" let g:indentLine_char = '⎸'
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+let g:indentLine_color_term = 66
 
-  " Format on save
-  "au BufWritePre * call CocAction('format')
+" Format on save
+"au BufWritePre * call CocAction('format')
 
-  " ruby host
-  " let g:ruby_host_prog = '/home/adrian/.rvm/gems/ruby-2.6.6/bin/neovim-ruby-host'
+" ruby host
+" let g:ruby_host_prog = '/home/adrian/.rvm/gems/ruby-2.6.6/bin/neovim-ruby-host'
 
-" -----References-----
-" https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
-" http://stevelosh.com/blog/2010/09/coming-home-to-vim/
-" https://github.com/carlhuda/janus/blob/f285edf1533eaecf526dabe0962dcd5107319af7/janus/vim/core/before/plugin/
-" Script to print colors: https://askubuntu.com/questions/821157/print-a-256-color-test-pattern-in-the-terminal/821163#821163
+nmap <Leader>c :CopilotChat <CR>
+nmap <Leader>ce :CopilotChatExplain <CR>
+nmap <Leader>cv :CopilotChatVisual <CR>
+lua require('copilot_chat')
