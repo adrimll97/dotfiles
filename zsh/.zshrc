@@ -9,7 +9,7 @@ fi
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH="/home/adrian/.oh-my-zsh"
+  export ZSH="/Users/adrianmunozllano/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -18,7 +18,10 @@ fi
 #ZSH_THEME="robbyrussell"
 #ZSH_THEME="agnoster"
 #ZSH_THEME="nanotech"
-ZSH_THEME="powerlevel10k/powerlevel10k"
+#ZSH_THEME="powerlevel10k/powerlevel10k"
+
+source /usr/local/share/powerlevel10k/powerlevel10k.zsh-theme
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -72,7 +75,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git colored-man-pages zsh-autosuggestions rails rake)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting colored-man-pages rails rake)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -101,50 +104,23 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 alias origclean='find . -name "*.orig" -exec rm -f {} \;'
 alias test_prepare='RAILS_ENV=test rake db:test:prepare'
 alias migrate='bin/rake db:migrate RAILS_ENV=development'
-alias console='bundle exec rails console'
 fetcheck(){
   git fetch origin $1 && git checkout $1
 }
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 export VISUAL=nvim
 export EDITOR="$VISUAL"
-
-# asdf-vm
-. $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
+export TERM=xterm-256color
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# --- RVM ---
-#
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export GEM_HOME="$HOME/.gem"
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-export PATH="$PATH:/usr/local/rvm/bin" # Add RVM to PATH for scripting
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
-# Error tmux with rvm https://github.com/rvm/rvm/issues/3270
-# https://github.com/charlietag/os_preparation/blob/master/templates/F_02_PKG_06_ruby_00_user_rubyuser/user_home/.bash_user/.rvm_setup.sh
-if [[ -s "/usr/local/rvm/scripts/rvm" ]]; then
-  export rvm_previous_environment="default"
-  source /usr/local/rvm/scripts/rvm
-  export rvm_previous_environment="default"
-  cd '.'
-  if [[ -n "${TMUX}" ]]; then
-    tmux setenv GEM_HOME $GEM_HOME
-    tmux setenv -g GEM_HOME $GEM_HOME
-    tmux setenv GEM_PATH $GEM_PATH
-    tmux setenv -g GEM_PATH $GEM_PATH
-  fi
-fi
-# --- RVM ---
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source /usr/local/opt/chruby/share/chruby/chruby.sh
+source /usr/local/opt/chruby/share/chruby/auto.sh
+chruby ruby-3.3.0
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
